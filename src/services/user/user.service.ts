@@ -33,11 +33,19 @@ export class UserService {
 
     // `doc` is the document _after_ `update` was applied because of
     // `new: true`
-    const doc = await this.userModel.findOneAndUpdate(filter, update, {
-      new: true,
-    });
-    doc.firstName; // 'Jean-Luc Picard'
-    doc.age; // 59
-    return doc;
+    try {
+      const doc = await this.userModel.findByIdAndUpdate(
+        '659bdcbd846edeabf77d8311',
+        { age: 55, firstName: 'Jean-Luc Picard' },
+        {
+          new: true,
+        },
+      );
+      doc.firstName; // 'Jean-Luc Picard'
+      doc.age; // 59
+      return doc;
+    } catch (e) {
+      debugger;
+    }
   }
 }
