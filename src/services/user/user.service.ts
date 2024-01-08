@@ -19,7 +19,25 @@ export class UserService {
     return this.userModel.find().exec();
   }
 
-  getOne(id: number): User {
-    return new User();
+  async get(id: string): Promise<User> {
+    return this.userModel.findById(id).exec();
+  }
+
+  async delete(id: string): Promise<any> {
+    return this.userModel.findByIdAndDelete(id).exec();
+  }
+
+  async update(createUserDto: CreateUserDto): Promise<User> {
+    const filter = { age: 100 };
+    const update = { age: 59 };
+
+    // `doc` is the document _after_ `update` was applied because of
+    // `new: true`
+    const doc = await this.userModel.findOneAndUpdate(filter, update, {
+      new: true,
+    });
+    doc.firstName; // 'Jean-Luc Picard'
+    doc.age; // 59
+    return doc;
   }
 }

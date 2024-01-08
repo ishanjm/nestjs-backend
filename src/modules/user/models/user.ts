@@ -1,11 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, now } from 'mongoose';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+@Schema({ timestamps: true, collection: 'User' })
 export class User {
+  @Prop()
+  @ApiProperty({ description: 'id of the user' })
+  _id: string;
+
   @Prop({ required: true })
   @ApiProperty({ example: 'Jhone', description: 'The last name of the user' })
   firstName: string;
@@ -45,6 +49,12 @@ export class User {
     description: 'Refresh Token',
   })
   refreshToken: string;
+
+  @Prop({ default: now() })
+  createdAt: Date;
+
+  @Prop({ default: now() })
+  updatedAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

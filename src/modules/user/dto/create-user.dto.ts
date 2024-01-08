@@ -1,5 +1,7 @@
-import { IsInt, IsString, IsEmail } from 'class-validator';
+import { IsInt, IsString, IsEmail, IsDate } from 'class-validator';
 export class CreateUserDto {
+  @IsString()
+  readonly _id: string;
   @IsString()
   readonly firstName: string;
   @IsString()
@@ -14,4 +16,8 @@ export class CreateUserDto {
   readonly role: string;
   @IsString()
   readonly refreshToken: string;
+  @IsDate()
+  readonly createdAt: Date;
+  @IsDate()
+  readonly updatedAt: Date;
 }
