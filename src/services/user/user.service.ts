@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from 'src/modules/user/models/user';
-import { CreateUserDto } from '../../modules/user/dto/create-user.dto';
+import { CreateUserDto, UpdateUserDto } from '../../modules/user/dto/index';
+import { IUser } from '../../modules/user/dto/IUser';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -8,44 +9,44 @@ import { Model } from 'mongoose';
 export class UserService {
   private readonly users: User[] = [];
 
-  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<IUser>) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<IUser> {
     const createUser = new this.userModel(createUserDto);
     return createUser.save();
   }
 
-  async getAll(): Promise<User[]> {
+  async getAll(): Promise<IUser[]> {
     return this.userModel.find().exec();
   }
 
-  async get(id: string): Promise<User> {
-    return this.userModel.findById(id).exec();
+  async get(id: string): Promise<IUser> {
+    const existingUser = await this.userModel.findById(id).exec();
+    if (!existingUser) {
+      throw new NotFoundException(`User #${id} not found`);
+    }
+    return existingUser;
   }
 
   async delete(id: string): Promise<any> {
-    return this.userModel.findByIdAndDelete(id).exec();
+    const existingUser = await this.userModel.findByIdAndDelete(id).exec();
+    if (!existingUser) {
+      throw new NotFoundException(`User #${id} not found`);
+    }
+    return existingUser;
   }
 
-  async update(createUserDto: CreateUserDto): Promise<User> {
-    const filter = { age: 100 };
-    const update = { age: 59 };
-
-    // `doc` is the document _after_ `update` was applied because of
-    // `new: true`
-    try {
-      const doc = await this.userModel.findByIdAndUpdate(
-        '659bdcbd846edeabf77d8311',
-        { age: 55, firstName: 'Jean-Luc Picard' },
-        {
-          new: true,
-        },
-      );
-      doc.firstName; // 'Jean-Luc Picard'
-      doc.age; // 59
-      return doc;
-    } catch (e) {
-      debugger;
+  async update(userId: string, updateUserDto: UpdateUserDto): Promise<IUser> {
+    const existingUser = await this.userModel.findByIdAndUpdate(
+      userId,
+      updateUserDto,
+      {
+        new: true,
+      },
+    );
+    if (!existingUser) {
+      throw new NotFoundException(`User #${userId} not found`);
     }
+    return existingUser;
   }
 }
