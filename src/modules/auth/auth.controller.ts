@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from './auth.guard';
 import { SetMetadata } from '@nestjs/common';
+import { LoginUser } from './models/loginUser';
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
@@ -23,7 +24,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
+  signIn(@Body() signInDto: LoginUser) {
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 

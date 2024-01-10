@@ -11,7 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
       global: true,
       secret:
         'DO NOT USE THIS VALUE. INSTEAD, CREATE A COMPLEX SECRET AND KEEP IT SAFE OUTSIDE OF THE SOURCE CODE.',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '500s' },
     }),
   ],
   controllers: [AuthController],

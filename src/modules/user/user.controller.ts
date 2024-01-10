@@ -18,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { UserService } from 'src/modules/user/user.service';
+import * as bcrypt from 'bcrypt';
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -30,6 +31,9 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'Success', type: User })
   async create(@Body() CreateUserDto: User, @Res() response): Promise<User> {
     try {
+      const saltOrRounds = 10;
+      const hash = await bcrypt.hash(CreateUserDto.password, saltOrRounds);
+      CreateUserDto.password = hash;
       const newUser = await this.userService.create(CreateUserDto);
       return response.status(HttpStatus.CREATED).json({
         message: 'User has been created successfully',
