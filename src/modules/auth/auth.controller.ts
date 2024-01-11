@@ -29,7 +29,6 @@ export class AuthController {
     @Body() signInDto: LoginUser,
     @Res({ passthrough: true }) response,
   ) {
-    //response.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
     const data = await this.authService.signIn(
       signInDto.email,
       signInDto.password,
