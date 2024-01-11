@@ -7,6 +7,7 @@ import {
   UseGuards,
   Request,
   Get,
+  Res,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -24,8 +25,21 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: LoginUser) {
-    return this.authService.signIn(signInDto.email, signInDto.password);
+  async signIn(
+    @Body() signInDto: LoginUser,
+    @Res({ passthrough: true }) response,
+  ) {
+    //response.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+    const data = await this.authService.signIn(
+      signInDto.email,
+      signInDto.password,
+    );
+    response.cookie('jwt', data, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    return data;
   }
 
   //@UseGuards(AuthGuard)

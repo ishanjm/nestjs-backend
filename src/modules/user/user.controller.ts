@@ -19,7 +19,10 @@ import {
 } from '@nestjs/swagger';
 import { UserService } from 'src/modules/user/user.service';
 import * as bcrypt from 'bcrypt';
+import { SetMetadata } from '@nestjs/common';
 
+export const IS_PUBLIC_KEY = 'isPublic';
+export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
 @ApiBearerAuth()
 @ApiTags('User')
 @Controller('User')
@@ -27,6 +30,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/register')
+  @Public()
   @ApiOperation({ summary: 'Create user' })
   @ApiResponse({ status: 200, description: 'Success', type: User })
   async create(@Body() CreateUserDto: User, @Res() response): Promise<User> {
