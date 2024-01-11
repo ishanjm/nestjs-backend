@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
-import serverless = require('serverless-http');
+//import serverless = require('serverless-http');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { abortOnError: false });
@@ -29,21 +29,21 @@ async function bootstrap() {
     .addTag('API')
     .build();
 
-  const globalPrefix = '.netlify/functions/main';
-  app.setGlobalPrefix(globalPrefix);
+  //const globalPrefix = '.netlify/functions/main';
+  // app.setGlobalPrefix(globalPrefix);
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   await app.listen(3000);
 
-  const expressApp = app.getHttpAdapter().getInstance();
-  return serverless(expressApp);
+  //const expressApp = app.getHttpAdapter().getInstance();
+  //return serverless(expressApp);
 }
 
-let server;
-export const handler = async (event, context, callback) => {
-  server = server ?? (await bootstrap());
-  return server(event, context, callback);
-};
+// let server;
+// export const handler = async (event, context, callback) => {
+//   server = server ?? (await bootstrap());
+//   return server(event, context, callback);
+// };
 
 bootstrap();
