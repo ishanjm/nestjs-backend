@@ -29,21 +29,9 @@ async function bootstrap() {
     .addTag('API')
     .build();
 
-  //const globalPrefix = '.netlify/functions/main';
-  // app.setGlobalPrefix(globalPrefix);
-
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   await app.listen(process.env.PORT);
-
-  //const expressApp = app.getHttpAdapter().getInstance();
-  //return serverless(expressApp);
 }
-
-// let server;
-// export const handler = async (event, context, callback) => {
-//   server = server ?? (await bootstrap());
-//   return server(event, context, callback);
-// };
-
+// update "start": "node dist/main", for cyclic
 bootstrap();
