@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthService } from './modules/auth/auth.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/auth.guard';
+import { RoleModule } from './modules/role/role.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthGuard } from './modules/auth/auth.guard';
     ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
     MongooseModule.forRoot(process.env.DATABASE_HOST),
     AuthModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [
