@@ -16,3 +16,8 @@ export class Role {
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);
+RoleSchema.virtual('Users', {
+  ref: 'User',
+  localField: '_id',
+  foreignField: 'role',
+});

@@ -1,4 +1,5 @@
 import { IsInt, IsString, IsEmail, IsDate, IsNotEmpty } from 'class-validator';
+import { Types } from 'mongoose';
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
@@ -19,7 +20,7 @@ export class CreateUserDto {
   readonly password: string;
 
   @IsString()
-  readonly role: string;
+  readonly role: Types.ObjectId;
 
   @IsString()
   readonly refreshToken: string;
